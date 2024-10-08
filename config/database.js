@@ -5,12 +5,13 @@ const dbConnection = () => {
     .then(({ connection }) => {
 
       console.log(`Database Connected: ${connection.host}`);
+
     })
 
-    .catch((reason) => {
-      console.log(reason);
-      process.exit(1)
-    })
+  // .catch((reason) => {
+  //   console.log(`Database Error: ${reason}`);
+  //   process.exit(1)
+  // })
 }
 
 module.exports = dbConnection

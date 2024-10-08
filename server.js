@@ -32,8 +32,16 @@ app.use(globalErrorHandler)
 
 
 const port = process.env.PORT || 3000
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on PORT ${port}`);
 })
 
 
+// *** HANDLE REJECTION OUTSIDE EXPRESS
+process.on('unhandledRejection', (err) => {
+  console.log(`Unhandled Rejection : ${err.name} | ${err.message}`);
+  server.close(() => {
+    console.log(`Closing the Server...`);
+    process.exit(1)
+  })
+})
