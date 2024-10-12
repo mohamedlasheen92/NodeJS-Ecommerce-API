@@ -7,9 +7,12 @@ const {
   getCategory,
 } = require("../controllers/category");
 const { getCategoryValidator, createCategoryValidator, updateCategoryValidator, deleteCategoryValidator } = require("../utils/validators/category");
-const { check } = require("express-validator");
-const validatorMiddleware = require("../middlewares/validator");
+const subCategoryRoute = require('./subCategory')
+
 const router = express.Router();
+
+router.use('/:categoryId/subcategories', subCategoryRoute)
+
 
 router
   .route("/")

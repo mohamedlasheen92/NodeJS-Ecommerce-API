@@ -1,12 +1,16 @@
 const express = require('express')
+
 const app = express()
 require('dotenv').config()
-const dbConnection = require('./config/database')
 const morgan = require('morgan')
-const asyncHandler = require('express-async-errors')
-const categoryRouter = require('./routes/category')
+require('express-async-errors')
+const dbConnection = require('./config/database')
 const ApiError = require('./utils/apiError')
 const globalErrorHandler = require('./middlewares/errorHandler')
+// Routes
+const categoryRoute = require('./routes/category')
+const subCategoryRoute = require('./routes/subCategory')
+const brandRoute = require('./routes/brand')
 
 
 // *** DATABASE CONNECTION
@@ -20,9 +24,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 app.use(express.json())
 
-app.use('/api/v1/categories', categoryRouter)
+app.use('/api/v1/categories', categoryRoute)
+app.use('/api/v1/subcategories', subCategoryRoute)
+app.use('/api/v1/brands', brandRoute)
 
-// *** Wrong Route
+// *** WRONG ROUTE
 app.all('*', (req, res, next) => {
   next(new ApiError('Route not available. Please check the URL.', 400))
 })
