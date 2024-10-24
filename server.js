@@ -11,6 +11,7 @@ const globalErrorHandler = require('./middlewares/errorHandler')
 const categoryRoute = require('./routes/category')
 const subCategoryRoute = require('./routes/subCategory')
 const brandRoute = require('./routes/brand')
+const productRoute = require('./routes/product')
 
 
 // *** DATABASE CONNECTION
@@ -27,6 +28,7 @@ app.use(express.json())
 app.use('/api/v1/categories', categoryRoute)
 app.use('/api/v1/subcategories', subCategoryRoute)
 app.use('/api/v1/brands', brandRoute)
+app.use('/api/v1/products', productRoute)
 
 // *** WRONG ROUTE
 app.all('*', (req, res, next) => {
