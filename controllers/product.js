@@ -1,7 +1,5 @@
 const slugify = require("slugify");
-
 const Product = require("../models/Product");
-
 const ApiError = require("../utils/apiError");
 
 
@@ -11,17 +9,64 @@ const ApiError = require("../utils/apiError");
 // @route   GET /api/v1/products
 // @access  Public
 const getProducts = async (req, res, next) => {
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 10;
+  // *** PAGINATION
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
-  const products = await Product.find({})
+  let filterObject = {}
+
+  // *** FILTERATION
+  const excludedFields = ['page', 'limit', 'skip', 'sort', 'fields', 'keyword']
+
+  const filterStr = JSON.stringify(req.query).replace(/(lt|lte|gt|gte|eq)/g, (operator) => `$${operator}`);
+  filterObject = JSON.parse(filterStr)
+
+  excludedFields.forEach(field => delete filterObject[field])
+
+
+  // *** BUILD QUERY
+  let query = Product.find(filterObject)
     .skip(skip)
     .limit(limit)
-    .populate({
-      path: 'category',
-      select: 'name'
-    })
+  // .populate({
+  //   path: 'category',
+  //   select: 'name -_id'
+  // })
+
+  // *** SORT
+  if (req.query.sort) {
+    const sortStr = req.query.sort.split(',').join(' ')
+    query = query.sort(sortStr)
+  } else {
+    query = query.sort('-createdAt')
+  }
+
+  // *** TARGET FIELDS
+  if (req.query.fields) {
+    const targetFieldsStr = req.query.fields.split(',').join(' ')
+    query = query.select(targetFieldsStr)
+  } else {
+    query = query.select('-__v')
+  }
+
+  // *** SEARCH
+  // keyword ======>>> find({$or: [{title: /keyword/}, {description: /keyword/}] })
+  if (req.query.keyword) {
+    const searchObj = {}
+
+    searchObj.$or = [
+      { title: { $regex: req.query.keyword, $options: 'i' } },
+      { description: { $regex: req.query.keyword, $options: 'i' } },
+    ]
+    query = query.find(searchObj)
+  }
+
+
+
+  // *** EXECUTE QUERY
+  const products = await query
+
 
   res
     .status(200)

@@ -1,11 +1,11 @@
 const fs = require('fs');
 /* eslint-disable import/no-extraneous-dependencies */
 require('colors')
-// const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 const Product = require('../../models/Product');
 const dbConnection = require('../../config/database');
 
-// dotenv.config({ path: '../../.env' });
+dotenv.config({ path: '../../.env' });
 
 // connect to DB
 dbConnection();

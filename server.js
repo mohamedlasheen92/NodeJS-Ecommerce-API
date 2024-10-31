@@ -1,7 +1,9 @@
 const express = require('express')
+require('dotenv').config()
+
+
 
 const app = express()
-require('dotenv').config()
 const morgan = require('morgan')
 require('express-async-errors')
 const dbConnection = require('./config/database')
