@@ -21,6 +21,7 @@ dbConnection()
 
 
 // *** MIDDLEWARES
+app.use(express.static('uploads'))
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
   console.log(`Mode: ${process.env.NODE_ENV}`)

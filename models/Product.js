@@ -43,6 +43,7 @@ const productSchema = new Schema({
     type: String,
     required: [true, 'Product cover image is required'],
   },
+  images: [String],
   category: {
     type: Schema.ObjectId,
     ref: 'Category',
@@ -69,6 +70,28 @@ const productSchema = new Schema({
   }
 
 }, { timestamps: true })
+
+
+const setImgCoverURL = (doc) => {
+  if (doc.imageCover) {
+    const imgCoverURL = `${process.env.BASE_URL}/products/${doc.imageCover}`
+    doc.imageCover = imgCoverURL
+  }
+  if (doc.images) {
+    const productImages = []
+    doc.images.forEach(img => {
+      const imgURL = `${process.env.BASE_URL}/products/${img}`
+      productImages.push(imgURL)
+    })
+    doc.images = productImages
+  }
+}
+productSchema.post('init', (doc) => {
+  setImgCoverURL(doc)
+})
+productSchema.post('save', (doc) => {
+  setImgCoverURL(doc)
+})
 
 
 const Product = model('Product', productSchema)

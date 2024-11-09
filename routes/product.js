@@ -6,20 +6,35 @@ const {
   updateProduct,
   deleteProduct,
   getProduct,
+  uploadProductImgs,
+  resizeProductImgs,
 } = require("../controllers/product");
-const { createProductValidator, updateProductValidator, deleteProductValidator, getProductValidator } = require("../utils/validators/product");
+const {
+  createProductValidator,
+  updateProductValidator,
+  deleteProductValidator,
+  getProductValidator,
+} = require("../utils/validators/product");
 
-
-const router = express.Router()
-
+const router = express.Router();
 
 router
   .route("/")
-  .post(createProductValidator, createProduct)
-  .get(getProducts)
+  .post(
+    uploadProductImgs,
+    resizeProductImgs,
+    createProductValidator,
+    createProduct
+  )
+  .get(getProducts);
 router
   .route("/:id")
-  .put(updateProductValidator, updateProduct)
+  .put(
+    uploadProductImgs,
+    resizeProductImgs,
+    updateProductValidator,
+    updateProduct
+  )
   .delete(deleteProductValidator, deleteProduct)
   .get(getProductValidator, getProduct);
 

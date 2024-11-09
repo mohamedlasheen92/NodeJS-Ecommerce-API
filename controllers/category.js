@@ -1,5 +1,32 @@
+/* eslint-disable import/no-extraneous-dependencies */
+const sharp = require('sharp');
+const { v4: uuidv4 } = require('uuid');
+
 const Category = require("../models/Category")
 const resourceOperations = require("./resourceOperations");
+const { uploadSingleImage } = require('../middlewares/uploadImage');
+
+
+// Temporarily saves image in memory for processing before storing it in the database
+const uploadCategoryImage = uploadSingleImage('image')
+
+const resizeCategoryImage = async (req, res, next) => {
+  if (req.file) {
+    const filename = `category-${uuidv4()}-${Date.now()}.jpeg`;
+
+    sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat('jpeg')
+      .jpeg({ quality: 95 })
+      .toFile(`uploads/categories/${filename}`)
+
+    req.body.image = filename
+  }
+
+  next()
+}
+
+
 
 // @desc    Get list of categories
 // @route   GET /api/v1/categories
@@ -32,5 +59,7 @@ module.exports = {
   getCategories,
   getCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  uploadCategoryImage,
+  resizeCategoryImage,
 }

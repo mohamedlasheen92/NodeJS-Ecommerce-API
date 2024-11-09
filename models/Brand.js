@@ -21,6 +21,20 @@ const brandSchema = new Schema({
 
 }, { timestamps: true })
 
+const setImageURL = (doc) => {
+  if (doc.image) {
+    const imageURL = `${process.env.BASE_URL}/brands/${doc.image}`
+    doc.image = imageURL
+  }
+}
+brandSchema.post('init', (doc) => {
+  setImageURL(doc)
+})
+brandSchema.post('save', (doc) => {
+  setImageURL(doc)
+})
+
+
 const Brand = model('Brand', brandSchema)
 
 module.exports = Brand
