@@ -56,6 +56,9 @@ const protect = async (req, res, next) => {
   if (!user)
     return next(new ApiError('Error: User no longer exists. Please log in again', 401));
 
+  if (!user.active)
+    return next(new ApiError('Your account is inactive. Please activate your account to proceed', 403));
+
   // Check if the user has changed their password after the token was created, making the current token invalid
   if (user.passwordChangedAt) {
     const passwordChangedTimestamp = Math.floor(user.passwordChangedAt.getTime() / 1000)
@@ -238,6 +241,7 @@ const resetPassword = async (req, res, next) => {
 
   // Set the new password
   user.password = req.body.newPassword;
+  user.passwordChangedAt = Date.now();
 
   user.passwordResetCode = undefined;
   user.passwordResetCodeVerified = undefined;
@@ -254,7 +258,6 @@ const resetPassword = async (req, res, next) => {
     token,
   })
 }
-
 
 
 module.exports = {

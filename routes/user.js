@@ -8,6 +8,11 @@ const {
   deleteUser,
   getUser,
   changeUserPassword,
+  getLoggedUserData,
+  updateLoggedUserPassword,
+  updateLoggedUserData,
+  deleteLoggedUser,
+  activateMyAccount,
 } = require("../controllers/user");
 const {
   createUserValidator,
@@ -15,16 +20,25 @@ const {
   deleteUserValidator,
   getUserValidator,
   changeUserPasswordValidator,
+  updateLoggedUserPasswordValidator,
+  updateLoggedUserDataValidator,
+  activateAccountValidator,
 } = require("../utils/validators/user");
 const { protect, allowedTo } = require("../controllers/auth");
 
 const router = express.Router();
 
-router.put(
-  "/changePassword/:id",
-  changeUserPasswordValidator,
-  changeUserPassword
-);
+
+// *** LOGGED USER
+router.get('/getMe', protect, getLoggedUserData, getUser)
+router.put('/updateMyPassword', protect, updateLoggedUserPasswordValidator, updateLoggedUserPassword)
+router.put('/updateMe', protect, updateLoggedUserDataValidator, updateLoggedUserData)
+router.delete('/deleteMe', protect, deleteLoggedUser)
+router.put('/activateMe', activateAccountValidator, activateMyAccount)
+
+
+// *** ADMIN
+router.put("/changePassword/:id", protect, allowedTo("admin", "manager"), changeUserPasswordValidator, changeUserPassword);
 
 router
   .route("/")

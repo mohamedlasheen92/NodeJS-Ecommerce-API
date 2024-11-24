@@ -38,8 +38,9 @@ const userSchema = new Schema({
   },
   passwordChangedAt: { type: Date },
   passwordResetCode: { type: String },
-  passwordResetCodeVerified: { type: Boolean, default: false },
-  passwordResetCodeExpiresAt: { type: Date }
+  passwordResetCodeVerified: { type: Boolean },
+  passwordResetCodeExpiresAt: { type: Date },
+  active: { type: Boolean, default: true }
 
 }, { timestamps: true })
 
