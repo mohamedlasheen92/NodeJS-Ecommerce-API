@@ -27,7 +27,7 @@ const createBrandValidator = [
 
 const updateBrandValidator = [
   check("id").isMongoId().withMessage("Invalid Brand Id format"),
-  check('name').notEmpty().withMessage('Brand name is required.')
+  check('name').optional()
     .isLength({ min: 3, max: 30 })
     .withMessage("Brand name must be between 3 and 30 characters long.")
     .custom((val, { req }) => {

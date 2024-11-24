@@ -1,9 +1,6 @@
 const express = require('express')
 require('dotenv').config()
 
-
-
-const app = express()
 const morgan = require('morgan')
 require('express-async-errors')
 const dbConnection = require('./config/database')
@@ -14,7 +11,11 @@ const categoryRoute = require('./routes/category')
 const subCategoryRoute = require('./routes/subCategory')
 const brandRoute = require('./routes/brand')
 const productRoute = require('./routes/product')
+const userRoute = require('./routes/user')
+const authRoute = require('./routes/auth')
 
+
+const app = express()
 
 // *** DATABASE CONNECTION
 dbConnection()
@@ -32,6 +33,8 @@ app.use('/api/v1/categories', categoryRoute)
 app.use('/api/v1/subcategories', subCategoryRoute)
 app.use('/api/v1/brands', brandRoute)
 app.use('/api/v1/products', productRoute)
+app.use('/api/v1/users', userRoute)
+app.use('/api/v1/auth', authRoute)
 
 // *** WRONG ROUTE
 app.all('*', (req, res, next) => {
