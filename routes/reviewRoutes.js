@@ -10,11 +10,11 @@ const {
   setProductAndUserToBody,
 
 
-} = require("../controllers/review");
+} = require("../controllers/reviewController");
 
 
-const { protect, allowedTo } = require("../controllers/auth");
-const { createReviewValidator, getReviewValidator, deleteReviewValidator, updateReviewValidator } = require("../utils/validators/review");
+const { protect, allowedTo } = require("../controllers/authController");
+const { createReviewValidator, getReviewValidator, deleteReviewValidator, updateReviewValidator } = require("../utils/validators/reviewValidator");
 
 const router = express.Router({ mergeParams: true });
 

@@ -13,7 +13,7 @@ const {
   updateLoggedUserData,
   deleteLoggedUser,
   activateMyAccount,
-} = require("../controllers/user");
+} = require("../controllers/userController");
 const {
   createUserValidator,
   updateUserValidator,
@@ -23,8 +23,8 @@ const {
   updateLoggedUserPasswordValidator,
   updateLoggedUserDataValidator,
   activateAccountValidator,
-} = require("../utils/validators/user");
-const { protect, allowedTo } = require("../controllers/auth");
+} = require("../utils/validators/userValidator");
+const { protect, allowedTo } = require("../controllers/authController");
 
 const router = express.Router();
 

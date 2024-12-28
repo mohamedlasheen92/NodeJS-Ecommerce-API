@@ -8,16 +8,16 @@ const {
   getProduct,
   uploadProductImgs,
   resizeProductImgs,
-} = require("../controllers/product");
+} = require("../controllers/productController");
 const {
   createProductValidator,
   updateProductValidator,
   deleteProductValidator,
   getProductValidator,
-} = require("../utils/validators/product");
-const { protect, allowedTo } = require("../controllers/auth");
+} = require("../utils/validators/productValidator");
+const { protect, allowedTo } = require("../controllers/authController");
 
-const reviewRoute = require("./review");
+const reviewRoute = require("./reviewRoutes");
 
 const router = express.Router();
 

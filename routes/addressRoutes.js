@@ -1,8 +1,8 @@
 const express = require('express');
 
-const { protect, allowedTo } = require('../controllers/auth');
-const { addAddress, removeAddress, getLoggedUserAddresses } = require('../controllers/address');
-const { addAddressValidator, removeAddressValidator } = require('../utils/validators/address');
+const { protect, allowedTo } = require('../controllers/authController');
+const { addAddress, removeAddress, getLoggedUserAddresses } = require('../controllers/addressController');
+const { addAddressValidator, removeAddressValidator } = require('../utils/validators/addressValidator');
 
 const router = express.Router();
 

@@ -8,15 +8,15 @@ const {
   getBrand,
   uploadBrandImage,
   resizeBrandImage,
-} = require("../controllers/brand");
+} = require("../controllers/brandController");
 
 const {
   getBrandValidator,
   createBrandValidator,
   updateBrandValidator,
   deleteBrandValidator,
-} = require("../utils/validators/brand");
-const { protect, allowedTo } = require("../controllers/auth");
+} = require("../utils/validators/brandValidator");
+const { protect, allowedTo } = require("../controllers/authController");
 
 const router = express.Router();
 

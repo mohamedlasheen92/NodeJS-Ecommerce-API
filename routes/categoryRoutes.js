@@ -7,15 +7,15 @@ const {
   getCategory,
   uploadCategoryImage,
   resizeCategoryImage,
-} = require("../controllers/category");
+} = require("../controllers/categoryController");
 const {
   getCategoryValidator,
   createCategoryValidator,
   updateCategoryValidator,
   deleteCategoryValidator,
-} = require("../utils/validators/category");
-const subCategoryRoute = require("./subCategory");
-const { protect, allowedTo } = require("../controllers/auth");
+} = require("../utils/validators/categoryValidator");
+const subCategoryRoute = require("./subCategoryRoutes");
+const { protect, allowedTo } = require("../controllers/authController");
 
 const router = express.Router();
 
