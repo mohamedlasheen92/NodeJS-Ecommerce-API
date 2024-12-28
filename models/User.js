@@ -40,7 +40,20 @@ const userSchema = new Schema({
   passwordResetCode: { type: String },
   passwordResetCodeVerified: { type: Boolean },
   passwordResetCodeExpiresAt: { type: Date },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+
+  wishlist: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+  },
+  addresses: [{
+    id: { type: Schema.Types.ObjectId },
+    alias: { type: String },
+    details: { type: String },
+    phone: { type: String },
+    city: { type: String },
+    postalCode: { type: String }
+
+  }]
 
 }, { timestamps: true })
 
@@ -71,6 +84,8 @@ userSchema.pre('save', async function () {
 userSchema.methods.verifyPassword = async function (plainPassword) {
   return await bcrypt.compare(plainPassword, this.password)
 }
+
+
 
 const User = model('User', userSchema)
 

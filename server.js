@@ -13,6 +13,9 @@ const brandRoute = require('./routes/brand')
 const productRoute = require('./routes/product')
 const userRoute = require('./routes/user')
 const authRoute = require('./routes/auth')
+const reviewRoute = require('./routes/review')
+const wishlistRoute = require('./routes/wishlist')
+const addressRoute = require('./routes/address')
 
 
 const app = express()
@@ -35,6 +38,9 @@ app.use('/api/v1/brands', brandRoute)
 app.use('/api/v1/products', productRoute)
 app.use('/api/v1/users', userRoute)
 app.use('/api/v1/auth', authRoute)
+app.use('/api/v1/reviews', reviewRoute)
+app.use('/api/v1/wishlist', wishlistRoute)
+app.use('/api/v1/address', addressRoute)
 
 // *** WRONG ROUTE
 app.all('*', (req, res, next) => {

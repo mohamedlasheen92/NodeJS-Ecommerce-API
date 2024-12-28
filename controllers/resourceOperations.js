@@ -25,9 +25,16 @@ const getAll = (Model, modelName) => async (req, res, next) => {
   });
 };
 
-const getOne = (Model) => async (req, res, next) => {
+const getOne = (Model, populateOpt) => async (req, res, next) => {
   const { id } = req.params;
-  const document = await Model.findById(id);
+
+  // Build Query
+  let query = Model.findById(id);
+  if (populateOpt)
+    query = query.populate(populateOpt)
+
+  // Execute Query
+  const document = await query
 
   if (!document) return next(new ApiError(`No document with Id ${id}`, 404));
 
@@ -48,6 +55,10 @@ const updateOne = (Model) => async (req, res, next) => {
     req.body,
     { new: true }
   );
+
+  // Trigger "save" event when update document
+  document.save()
+
   if (!document)
     return next(new ApiError(`No document with Id ${id}`, 404));
 
@@ -58,7 +69,7 @@ const updateOne = (Model) => async (req, res, next) => {
 const deleteOne = (Model) => async (req, res, next) => {
   const { id } = req.params;
 
-  const document = await Model.findByIdAndDelete(id);
+  const document = await Model.findOneAndDelete({ _id: id });
   if (!document)
     return next(new ApiError(`No document with Id ${id}`, 404));
 

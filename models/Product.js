@@ -69,7 +69,17 @@ const productSchema = new Schema({
     default: 0
   }
 
-}, { timestamps: true })
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+})
+
+productSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'product',
+  localField: '_id',
+})
 
 
 const setImgCoverURL = (doc) => {
@@ -92,7 +102,6 @@ productSchema.post('init', (doc) => {
 productSchema.post('save', (doc) => {
   setImgCoverURL(doc)
 })
-
 
 const Product = model('Product', productSchema)
 module.exports = Product

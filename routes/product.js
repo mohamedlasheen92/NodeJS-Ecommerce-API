@@ -17,7 +17,11 @@ const {
 } = require("../utils/validators/product");
 const { protect, allowedTo } = require("../controllers/auth");
 
+const reviewRoute = require("./review");
+
 const router = express.Router();
+
+router.use('/:productId/reviews', reviewRoute)
 
 router
   .route("/")

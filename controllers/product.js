@@ -51,7 +51,7 @@ const getProducts = resourceOperations.getAll(Product, 'Product')
 // @desc    Get specific product by id
 // @route   GET /api/v1/products/:id
 // @access  Public
-const getProduct = resourceOperations.getOne(Product)
+const getProduct = resourceOperations.getOne(Product, 'reviews')
 
 // @desc    Create specific product
 // @route   POST /api/v1/products/:id
