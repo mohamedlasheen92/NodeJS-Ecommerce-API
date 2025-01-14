@@ -9,7 +9,7 @@ const couponSchema = new Schema({
     unique: true,
     trim: true,
     minlength: [3, 'Coupon name must be at least 3 characters long'],
-    maxlength: [50, 'Coupon name cannot be more than 50 characters long']
+    maxlength: [30, 'Coupon name cannot be more than 30 characters long']
   },
   expiryDate: {
     type: Date,
@@ -18,7 +18,7 @@ const couponSchema = new Schema({
   discountPercentage: {
     type: Number,
     required: [true, 'Coupon discount percentage is required'],
-    min: [1, 'Coupon discount percentage must be at least 1%'],
+    min: [0, 'Coupon discount percentage must be at least 1%'],
     max: [100, 'Coupon discount percentage cannot exceed 100%'],
   }
 
