@@ -1,3 +1,4 @@
+const stripe = require('stripe')(process.env.STRIPE_SECRET)
 const Cart = require("../models/Cart")
 const Order = require("../models/Order")
 const Product = require("../models/Product")
@@ -107,6 +108,54 @@ const updateOrderToDelivered = async (req, res, next) => {
   })
 }
 
+// @desc    Get Checkout Session from Stripe and Send it as a Response
+// @route   GET /api/v1/orders/checkout-session/:cartId
+// @access  Protected/User
+const getCheckoutSession = async (req, res, next) => {
+  const taxPrice = 0
+  const shippingPrice = 0
+
+  //Get user cart
+  const cart = await Cart.findOne({ user: req.user._id })
+  if (!cart)
+    return next(new ApiError('No cart found for the provided user ID', 404))
+
+  //Get total price and check if a coupon applied
+  const cartPrice = cart.totalCartPriceAfterDiscount ? cart.totalCartPriceAfterDiscount : cart.totalCartPrice
+  //Calculate total price including tax and shipping
+  const totalPrice = cartPrice + taxPrice + shippingPrice
+
+  //Create Stripe Checkout Session
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: 'EGP',
+          product_data: {
+            name: req.user.name,
+          },
+          unit_amount: totalPrice * 100,
+        },
+        quantity: 1,    //Used when price of two tickets for example
+      }
+    ],
+    mode: 'payment',
+    success_url: `${req.protocol}://${req.get('host')}/orders`,
+    cancel_url: `${req.protocol}://${req.get('host')}/cart`,
+    customer_email: req.user.email,
+    client_reference_id: req.params.cartId,
+    metadata: req.body.shippingAddress
+  })
+
+  //Send session in response
+  res.status(200).json({
+    status: "success",
+    message: "Checkout session created",
+    session
+  })
+}
+
+
 
 module.exports = {
   createCashOrder,
@@ -115,5 +164,6 @@ module.exports = {
   getSpecificOrder,
   updateOrderToPaid,
   updateOrderToDelivered,
+  getCheckoutSession,
 
 }

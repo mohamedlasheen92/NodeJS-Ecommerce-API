@@ -1,19 +1,22 @@
 const express = require('express');
-const { createCashOrder, getAllOrders, getSpecificOrder, updateOrderToPaid, updateOrderToDelivered } = require('../controllers/orderController');
+const { createCashOrder, getAllOrders, getSpecificOrder, updateOrderToPaid, updateOrderToDelivered, getCheckoutSession } = require('../controllers/orderController');
 const { protect, allowedTo } = require('../controllers/authController');
 const { createCashOrderValidator, getSpecificOrderValidator } = require('../utils/validators/orderValidator');
 
 const router = express.Router();
 
+router.use(protect)
 
-router.route('/').post(protect, allowedTo('user'), createCashOrderValidator, createCashOrder)
+router.get('/checkout-session/:cartId', allowedTo('user'), getCheckoutSession)
+
+router.route('/').post(allowedTo('user'), createCashOrderValidator, createCashOrder)
 router.route('/')
-  .get(protect, allowedTo('admin', 'manager', 'user'), getAllOrders)
+  .get(allowedTo('admin', 'manager', 'user'), getAllOrders)
 
 router.route('/:id')
-  .get(protect, allowedTo('admin', 'manager', 'user'), getSpecificOrderValidator, getSpecificOrder)
+  .get(allowedTo('admin', 'manager', 'user'), getSpecificOrderValidator, getSpecificOrder)
 
-router.put('/:orderId/pay', protect, allowedTo('admin', 'manager'), updateOrderToPaid)
-router.put('/:orderId/deliver', protect, allowedTo('admin', 'manager'), updateOrderToDelivered)
+router.put('/:orderId/pay', allowedTo('admin', 'manager'), updateOrderToPaid)
+router.put('/:orderId/deliver', allowedTo('admin', 'manager'), updateOrderToDelivered)
 
 module.exports = router

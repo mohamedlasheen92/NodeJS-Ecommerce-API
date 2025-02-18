@@ -1,7 +1,12 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const express = require('express')
 require('dotenv').config()
 
 const morgan = require('morgan')
+
+const cors = require('cors')
+const compression = require('compression')
+
 require('express-async-errors')
 const dbConnection = require('./config/database')
 const ApiError = require('./utils/apiError')
@@ -11,6 +16,13 @@ const globalErrorHandler = require('./middlewares/errorHandler')
 const mountRoutes = require('./routes')
 
 const app = express()
+
+// *** CORS [Enables other domains to access the application]
+app.use(cors())
+app.options('*', cors())
+
+// *** COMPRESSION [Saves bandwidth by compressing the response]
+app.use(compression())
 
 // *** DATABASE CONNECTION
 dbConnection()
