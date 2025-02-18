@@ -3,17 +3,18 @@ const express = require('express')
 require('dotenv').config()
 
 const morgan = require('morgan')
+const serverless = require('serverless-http');
 
 const cors = require('cors')
 const compression = require('compression')
 
 require('express-async-errors')
-const dbConnection = require('./config/database')
-const ApiError = require('./utils/apiError')
-const globalErrorHandler = require('./middlewares/errorHandler')
+const dbConnection = require('../config/database')
+const ApiError = require('../utils/apiError')
+const globalErrorHandler = require('../middlewares/errorHandler')
 
 // Routes
-const mountRoutes = require('./routes')
+const mountRoutes = require('../routes')
 
 const app = express()
 
@@ -62,3 +63,6 @@ process.on('unhandledRejection', (err) => {
     process.exit(1)
   })
 })
+
+app.use('/.netlify/functions/api');
+module.exports.handler = serverless(app);
